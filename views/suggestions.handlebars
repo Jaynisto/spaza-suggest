@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    pleae sugest :
+    <form action="/clients/{{username}}" method="post">
+        <div class="suggestions">
+            {{!-- {{checked}} --}}
+            <label for="cars">Select Area For Suggestion:</label>
+            <select name="area" id="area">
+            {{#each names}}
+             <option value="{{id}}">{{area_name}}</option>
+            {{/each}}
+            </select>
+            <br><br>
+            <p>Please Type Your Suggestion bellow</p><br>
+            <label for="suggestion">Product Name:</label>
+            <input name="pname"><br><br>
+            </div>
+        </div>
+        <div class="btn">
+            <button type="submit">Submit</button>
+            <button><a href="/" style="text-decoration: none;">Sign Out</a></button>
+        </div>
+    </form>
+</body>
+</html>

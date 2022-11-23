@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Sign up</h2>
+    <form action="ownerSignIn" method="POST">
+        <label for="cars">Select Area To Register To:</label>
+            <select name="area" id="area">
+            {{#each places}}
+             <option value="{{id}}">{{area_name}}</option>
+            {{/each}}
+            </select>
+        <span class="error-form">
+            <div class="successMessage">
+                {{messages.success}}
+            </div>
+            <div class="errorMessage">
+                {{messages.error}}
+            </div><br>
+        </span><br><br>
+        <div class="user-box">
+            <input type="text" name="ownername">
+            <label>Spazaname:</label>
+        </div><br>
+        <button class="submitbtn" type="submit">Submit</button>
+    </form> 
+    <button class="loginbtn"><a href="/ownerLohgIn" style="text-decoration: none;">Log in</a></button>
+       
+</body>
+</html>

@@ -3,12 +3,24 @@ import ShortUniqueId from 'short-unique-id';
 export default function SpazaSuggest (db){
 
     const uid = new ShortUniqueId({ length: 5 });
+    const userId = async (username) => {
+        const userId = await db.oneOrNone('select id from spaza_client where username = $1;', [username])
+        return userId.id;
+
+    }
+
+    const codeForExistingUsers = async (username) => {
+        const timesEntered = await db.oneOrNone('select code from spaza_client where username = $1;', [username])
+        return timesEntered.code;
+
+    }
 
     //// returns client code
     async function registerClient(username){
         // get the code
 
         const uniqCode = uid();
+        console.log(uniqCode)
         await db.none(`insert into spaza_client (username, code) values ($1, $2)`, [username, uniqCode])
         return uniqCode;
 
@@ -20,6 +32,7 @@ export default function SpazaSuggest (db){
         return client
     }
 
+    
     // return all areas
     async function areas() {
         const areas = await db.manyOrNone(`select * from area order by area_name asc`)
@@ -49,6 +62,12 @@ export default function SpazaSuggest (db){
     // upvote a given suggesstion
     function likeSuggestion(suggestionId, userId) {
         `insert into liked_suggestion (suggestion_id, user_id) values ($1, $2)`;
+    }
+
+    const codeForExistingSpaza = async (username) => {
+        const timesEntered = await db.oneOrNone('select code from spaza where shop_name = $1;', [username])
+        return timesEntered.code;
+
     }
 
     // create the spaza shop and return a code
@@ -109,6 +128,9 @@ export default function SpazaSuggest (db){
         suggestions,
         suggestionsForArea,
         likeSuggestion,
-        clientLogin
+        clientLogin,
+        codeForExistingUsers,
+        userId,
+        codeForExistingSpaza
     }
 }
