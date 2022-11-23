@@ -62,9 +62,9 @@ app.post('/clientReg', async(req, res) => {
 });
 
 app.post('/ownerSignIn', async(req, res) => {
-    const { ownername, area } = req.body;
+    const { ownername, spaza } = req.body;
     if(ownername){
-        await sendOrGetData.registerSpaza(ownername, area)
+        await sendOrGetData.registerSpaza(ownername, spaza)
         const checkingUserCode = await sendOrGetData.codeForExistingSpaza(ownername)
         req.flash('success', "Your Code is to log in ", checkingUserCode)
     }
@@ -80,6 +80,51 @@ app.get('/clients/:username', async (req, res) => {
         username
     })
 })
+
+app.get('/owner/:spaza', async (req, res) => {
+    const { spaza } = req.params; 
+    console.log(spaza)
+    res.render("spaz", {
+       spaza 
+    })
+})
+
+app.post('/owner/:spaza', async (req, res) => {
+    const { spaza } = req.params;
+    const { checked } = req.body;
+    const clientId = await sendOrGetData.ownerId(spaza)
+    
+    if(spaza){
+        await sendOrGetData.registerSpaza(spaza, clientId,)
+        req.flash('success', 'Entry Added');
+    }
+    else{
+        req.flash('error', 'Select product name & area');
+    }
+    // const userDetails = await sendOrGetData.waitersDays(names, days);
+    res.redirect("/owner/" + spaza)
+})
+app.get('/ownerLohgIn', (req,res)=>{
+    res.render("ownerLohgIn")
+})
+
+app.post('/ownerLohgIn', async (req, res)=>{
+    const { pascode } = req.body;
+    if(pascode){
+        const user = await sendOrGetData.spazaLogin(pascode);
+        if(user) {
+            req.session.user = user;
+            res.redirect(`owner/${user.username}`)
+            return;
+        }else{
+            res.redirect("/ownerSignIn")
+        }
+    }
+    else{
+        res.redirect("/ownerLohgIn")
+    }
+})
+
 
 app.post('/clients/:username', async (req, res) => {
     const { username } = req.params;
@@ -118,6 +163,8 @@ app.post('/clientLogin', async (req, res) => {
     }
 
 })
+
+
 
 
 const PORT = process.env.PORT || 3032;

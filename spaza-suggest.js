@@ -31,7 +31,7 @@ export default function SpazaSuggest (db){
         const client = await db.oneOrNone(`select * from spaza_client where code = $1`, [code]);
         return client
     }
-
+    
     
     // return all areas
     async function areas() {
@@ -67,6 +67,12 @@ export default function SpazaSuggest (db){
     const codeForExistingSpaza = async (username) => {
         const timesEntered = await db.oneOrNone('select code from spaza where shop_name = $1;', [username])
         return timesEntered.code;
+
+    }
+
+    const ownerId = async (username) => {
+        const userId = await db.oneOrNone('select id from spaza where username = $1;', [username])
+        return userId.id;
 
     }
 
@@ -131,6 +137,7 @@ export default function SpazaSuggest (db){
         clientLogin,
         codeForExistingUsers,
         userId,
-        codeForExistingSpaza
+        codeForExistingSpaza,
+        ownerId
     }
 }
